@@ -1,0 +1,17 @@
+{
+  "bois":["goapronti"],
+  "unique_id":["*"],
+ "customer_no":["*"],
+  "account_no":["*"],
+  "bogoso_users":["*"],
+  "bogoso_db_user":"",
+  "bogoso_db_name":"",
+  "bogoso_db_pwd":"",
+  "bogoso_db_host":"localhost",
+  "bogoso_db_port":5454,
+  "portal_admin":"",
+  "portal_admin_email":"",
+  "portal_admin_password":"",
+  "gmail_app_token":""
+  
+}

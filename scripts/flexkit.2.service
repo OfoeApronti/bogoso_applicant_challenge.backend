@@ -1,0 +1,36 @@
+[Unit]
+Description=Switch knife utility for Flexcube referencing
+ConditionPathExists=/home/blowman/dev/bogoso.backend/main
+After=network.target
+ 
+[Service]
+Type=simple
+LimitNOFILE=1024
+
+Environment="LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib"
+Environment="TNS_ADMIN=/home/svc_bios_user@myfidelitybank.net"
+
+Restart=on-failure
+RestartSec=10
+startLimitIntervalSec=60
+
+WorkingDirectory=/home/blowman/dev/bogoso.backend
+ExecStart=/home/blowman/dev/bogoso.backend/main
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+#ExecStartPre=+/bin/mkdir -p /var/log/bogoso.backend
+#ExecStartPre=+/bin/chown syslog:adm /var/log/bogoso.backend
+#ExecStartPre=+/bin/chmod 755 /var/log/bogoso.backend
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=bogoso.backend
+ 
+[Install]
+WantedBy=multi-user.target
+
+#/lib/systemd/system/bogoso.backend.service
+#sudo systemctl enable bogoso.backend.service
+#sudo systemctl start bogoso.backend
+#sudo journalctl -f -u bogoso.backend
+#sudo systemctl disable bogoso.backend.service
