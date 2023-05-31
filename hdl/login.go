@@ -41,7 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	js, err := json.Marshal(uPayload)
 	if err != nil {
-		logger.Errorf("Error resolving LDAP payload for: %s", t.Userid)
+		logger.Errorf("Error marshalling: %s", t.Userid)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

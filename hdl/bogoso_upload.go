@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 
 	"blow.com/bogoso.backend/app"
 	log "github.com/sirupsen/logrus"
@@ -27,15 +26,14 @@ var BogosoCvUpload = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	cv_id, err := strconv.Atoi(r.FormValue("id"))
-	if err != nil {
-		// handle err
-		http.Error(w, "Error reading id", http.StatusInternalServerError)
-		return
-	}
+	cv_id := r.FormValue("id")
 	cv_name := r.FormValue("name")
 	cv_email := r.FormValue("email")
 	cv_phone := r.FormValue("phone")
+	if cv_id == ""  || cv_name == "" || cv_email == "" || cv_phone == "" {
+		http.Error(w, "Some required fields are empty", http.StatusInternalServerError)
+		return
+	}
 	_, header, _ := r.FormFile("cv_file")
 	fmt.Println(header.Filename)
 	file_response_name := header.Filename

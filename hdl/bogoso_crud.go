@@ -18,33 +18,8 @@ type EditData struct {
 	Phone string `json:"phone" validate:"required"`
 }
 
-var BogosoEditCV = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	logger := log.WithFields(log.Fields{"module": "hdl.GetElevyRecords"})
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		logger.Errorf("ioutil.ReadAll(r.Body): %s", err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-		//		panic(err)
-	}
-	var e EditData
-	err = json.Unmarshal(body, &e)
-	if err != nil {
-
-		logger.Errorf("json.Unmarshal(body, &t): %s", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-		//		panic(err)
-	}
-
-	_, err = app.DBBogoso.Exec(`update bogoso.cv_files
-			set applicant_name =$1, email=$email,phone=$phone
-			where id=$4`, e.Name, e.Email, e.Phone, e.Id)
-	fmt.Fprintf(w, "Edit successful")
-})
-
 var BogosoDeleteCV = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	logger := log.WithFields(log.Fields{"module": "hdl.GetElevyRecords"})
+	logger := log.WithFields(log.Fields{"module": "hdl.BogosoDeleteCV"})
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Errorf("ioutil.ReadAll(r.Body): %s", err.Error())
@@ -52,6 +27,7 @@ var BogosoDeleteCV = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reques
 		return
 		//		panic(err)
 	}
+	logger.Info("BogosoDeleteCV")
 	var e EditData
 	err = json.Unmarshal(body, &e)
 	if err != nil {
@@ -64,6 +40,13 @@ var BogosoDeleteCV = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reques
 
 	_, err = app.DBBogoso.Exec(`delete from bogoso.cv_files
 			where id=$1`, e.Id)
+	if err != nil {
+
+		logger.Error(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+		//		panic(err)
+	}
 	fmt.Fprintf(w, "Delete successful")
 })
 
