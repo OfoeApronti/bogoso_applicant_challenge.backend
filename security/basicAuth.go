@@ -2,6 +2,7 @@ package security
 
 import (
 	"errors"
+	"strings"
 
 	"blow.com/bogoso.backend/app"
 	log "github.com/sirupsen/logrus"
@@ -21,7 +22,7 @@ func BasicAuth(p_userid string, p_password string) (UserProfile, error) {
 	logger.Infof("username concat: %s", username)
 	var u UserProfile
 
-	if p_userid != app.PortalAdminEmail && p_userid != app.PortalAdmin {
+	if strings.ToLower(p_userid) != strings.ToLower(app.PortalAdminEmail) && strings.ToLower(p_userid) != strings.ToLower(app.PortalAdmin) {
 		return u, errors.New("Invalid User")
 	}
 	if password != app.PortalAdminPassword {
@@ -38,5 +39,3 @@ func BasicAuth(p_userid string, p_password string) (UserProfile, error) {
 	u.Token = token
 	return u, nil
 }
-
-
